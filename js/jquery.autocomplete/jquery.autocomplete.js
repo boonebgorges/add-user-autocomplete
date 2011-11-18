@@ -43,6 +43,7 @@
       highlight: true,
       params: {},
       fnFormatResult: fnFormatResult,
+      onReturn: false,
       delimiter: null,
       zIndex: 9999
     };
@@ -259,6 +260,8 @@
     },
 
     suggest: function() {
+      this.onReturn();
+      
       if (this.suggestions.length === 0) {
         this.hide();
         return;
@@ -374,6 +377,11 @@
       d = me.data[i];
       me.el.val(me.getValue(s));
       if ($.isFunction(fn)) { fn(s, d, me.el); }
+    },
+    
+    onReturn: function() {
+      fn = this.options.onReturn;
+      if ($.isFunction(fn)) { fn(); }
     },
     
     getValue: function(value){

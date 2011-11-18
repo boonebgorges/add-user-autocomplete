@@ -3,6 +3,7 @@ jQuery(document).ready(function($) {
 	
 	$(ainput).after('<ul id="add-to-blog-users"></ul>');
 	$(ainput).bind('keyup',function(event){
+		// Delete, backspace, 0-9, a-z
 		if( ( 45 < event.keyCode && event.keyCode < 91 ) || event.keyCode == 8 ) {
 			$(ainput).addClass('loading');
 		}
@@ -12,10 +13,10 @@ jQuery(document).ready(function($) {
 	
 	var options = {
 		serviceUrl: ajaxurl,
-		fnFormatResult: a2bFormatResult,
 		width: 300,
 		delimiter: /(,|;)\s*/,
-		onSelect: function(dname,user_id){ btest(dname,user_id); },
+		onSelect: function(dname,user_id){ a2bAddItem(dname,user_id); },
+		onReturn: function(){$(ainput).removeClass('loading');},
 		deferRequestBy: 500, // miliseconds
 		params: { 
 			action: 'add_to_blog_find_user'
@@ -25,16 +26,8 @@ jQuery(document).ready(function($) {
 	
 	a = $(ainput).autocomplete(options);
 
-	function btest(dname,user_id){
+	function a2bAddItem(dname,user_id){
 		$(ulist).append('<li class="atb-user" id="atb-user-' + user_id + '">' + dname + '</li>');
-	}
-	
-	function a2bFormatResult(value, data, currentValue) {
-		$(ainput).removeClass('loading');
-		
-		var a2breEscape = new RegExp('(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\') + ')', 'g');
-		var a2bpattern = '(' + currentValue.replace(a2breEscape, '\\$1') + ')';
-		return value.replace(new RegExp(a2bpattern, 'gi'), '<strong>$1<\/strong>');
 	}
 	
 },(jQuery));
