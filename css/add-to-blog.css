@@ -4,3 +4,7 @@
 .autocomplete .selected { background:#F0F0F0; }
 .autocomplete div { padding:2px 5px; white-space:nowrap; }
 .autocomplete strong { font-weight:normal; color:#3399FF; }
+
+input.loading {
+	background: transparent url('../images/ajax-loader.gif') no-repeat right top;
+}
