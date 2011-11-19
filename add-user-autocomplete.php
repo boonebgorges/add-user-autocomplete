@@ -1,16 +1,18 @@
 <?php
 /*
-Plugin Name: Add To Blog
+Plugin Name: Add User Autocomplete
+Plugin URI: http://github.com/boonebgorges/add-user-autocomplete
+Description: Enables autocomplete for the Add Existing User field at Dashboard > Users > Add New
 Author: Boone Gorges
 Version: 1.0
-Network: true
+Author URI: http://boonebgorges.com
 */
 
 if ( !defined( 'ABSPATH' ) ) 
 	return;
 
 
-class Add_To_Blog {
+class Add_User_Autocomplete {
 	var $base_url;
 	
 	function __construct() {
@@ -22,12 +24,12 @@ class Add_To_Blog {
 	}
 	
 	function add_admin_styles() {
-		wp_enqueue_style( 'add-to-blog-css', plugins_url() . '/add-to-blog/css/add-to-blog.css' );
+		wp_enqueue_style( 'add-user-autocomplete-css', plugins_url() . '/add-user-autocomplete/css/add-user-autocomplete.css' );
 	}
 	
 	function add_admin_scripts() {
-		wp_enqueue_script( 'jquery.autocomplete', plugins_url() . '/add-to-blog/js/jquery.autocomplete/jquery.autocomplete.js', array( 'jquery' ) );
-		wp_enqueue_script( 'add-to-blog-js', plugins_url() . '/add-to-blog/js/add-to-blog.js', array( 'jquery', 'jquery.autocomplete' ) );
+		wp_enqueue_script( 'jquery.autocomplete', plugins_url() . '/add-user-autocomplete/js/jquery.autocomplete/jquery.autocomplete.js', array( 'jquery' ) );
+		wp_enqueue_script( 'add-user-autocomplete-js', plugins_url() . '/add-user-autocomplete/js/add-user-autocomplete.js', array( 'jquery', 'jquery.autocomplete' ) );
 	
 	}
 	
@@ -137,12 +139,12 @@ class Add_To_Blog {
 	}
 }
 
-function add_to_blog_init() {
+function aua_init() {
 	if ( is_admin() ) {
-		$add_to_blog = new Add_To_Blog;
+		$add_user_autocomplete = new Add_User_Autocomplete;
 	}
 }
-add_action( 'init', 'add_to_blog_init' );
+add_action( 'init', 'aua_init' );
 
 /**
  * Extends WP_User_Query to make search better
