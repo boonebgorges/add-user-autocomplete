@@ -36,8 +36,15 @@ jQuery(document).ready(function($) {
 
 	function a2bAddItem(dname,user_id){
 		$(ulist).append('<li class="atb-user" id="atb-user-' + user_id + '"><span class="remove"><a href="#">x</a></span> ' + dname + '</li>');
-		$(ulist).append('<input type="hidden" name="add_ids[]" value="' + user_id + '" />');
+		$(ulist).append('<input type="hidden" name="add_ids[]" id="atb-input-' + user_id + '" value="' + user_id + '" />');
 		$(ainput).val('');
+		
+		$('#add-to-blog-users span.remove a').bind('click', function(){
+			var ruid = $(this).parents('.atb-user').attr('id').split('-').pop();
+			$('#atb-user-' + ruid).remove();
+			$('#atb-input-' + ruid).remove();
+			return false;
+		});
 	}
 	
 },(jQuery));
