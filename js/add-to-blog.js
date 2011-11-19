@@ -1,7 +1,15 @@
 jQuery(document).ready(function($) {
 	var ainput = $('#adduser-email');
 	
+	/* Prevent WP from running its form validation */
+	$('form#adduser').removeClass('validate');
+	
+	/* Prevent WP core admin script from running */
+	$('form#adduser input[name="action"]').remove();
+	
 	$(ainput).after('<ul id="add-to-blog-users"></ul>');
+	
+	/* Spinner */
 	$(ainput).bind('keyup',function(event){
 		// Delete, backspace, 0-9, a-z
 		if( ( 45 < event.keyCode && event.keyCode < 91 ) || event.keyCode == 8 ) {
@@ -27,7 +35,9 @@ jQuery(document).ready(function($) {
 	a = $(ainput).autocomplete(options);
 
 	function a2bAddItem(dname,user_id){
-		$(ulist).append('<li class="atb-user" id="atb-user-' + user_id + '">' + dname + '</li>');
+		$(ulist).append('<li class="atb-user" id="atb-user-' + user_id + '"><span class="remove"><a href="#">x</a></span> ' + dname + '</li>');
+		$(ulist).append('<input type="hidden" name="add_ids[]" value="' + user_id + '" />');
+		$(ainput).val('');
 	}
 	
 },(jQuery));
