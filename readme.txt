@@ -6,11 +6,11 @@ Requires at least: 3.1
 Tested up to: 3.2.1
 Stable tag: 1.0
 
-Enables autocomplete for the Add Existing User field at Dashboard > Users > Add New
+Enables autocomplete for the Add Existing User field at Dashboard > Users > Add New. Requires Multisite.
 
 == Description ==
 
-WordPress's Add Existing User field requires you to type the username or email address of an existing user. This plugin makes this job a bit easier, by adding autocomplete functionality to the Add Existing User box. It also allows you to add multiple users at a time.
+WordPress Multisite's Add Existing User field requires you to type the username or email address of an existing user. This plugin makes this job a bit easier, by adding autocomplete functionality to the Add Existing User box. It also allows you to add multiple users at a time.
 
 == Installation ==
 
