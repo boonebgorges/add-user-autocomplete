@@ -8,74 +8,77 @@ Version: 1.0
 Author URI: http://boonebgorges.com
 */
 
-if ( !defined( 'ABSPATH' ) ) 
+if ( !defined( 'ABSPATH' ) )
 	return;
 
 
 class Add_User_Autocomplete {
 	var $base_url;
-	
+
 	function __construct() {
 		add_action( 'admin_print_styles', array( $this, 'add_admin_styles' ) );
 		add_action( 'admin_print_scripts', array( $this, 'add_admin_scripts' ) );
 		add_action( 'wp_ajax_add_to_blog_find_user', array( &$this, 'autocomplete_results' ) );
-		add_action( 'admin_init', array( &$this, 'catch_submit' ) ); 
+		add_action( 'admin_init', array( &$this, 'catch_submit' ) );
 		add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
 	}
-	
+
 	function add_admin_styles() {
 		wp_enqueue_style( 'add-user-autocomplete-css', plugins_url() . '/add-user-autocomplete/css/add-user-autocomplete.css' );
 	}
-	
+
 	function add_admin_scripts() {
+		// Dequeue WP 3.4's autocomplete
+		wp_dequeue_script( 'user-search' );
+
 		wp_enqueue_script( 'jquery.autocomplete', plugins_url() . '/add-user-autocomplete/js/jquery.autocomplete/jquery.autocomplete.js', array( 'jquery' ) );
 		wp_enqueue_script( 'add-user-autocomplete-js', plugins_url() . '/add-user-autocomplete/js/add-user-autocomplete.js', array( 'jquery', 'jquery.autocomplete' ) );
-	
+
 	}
-	
+
 	function autocomplete_results() {
-	
+
 		$return = array(
 			'query' 	=> $_REQUEST['query'],
 			'data' 		=> array(),
 			'suggestions' 	=> array()
 		);
-	
+
 		// Exclude current users of this blog
 		$this_blog_users = new WP_User_Query( array(
 			'blog_id' => get_current_blog_id()
 		) );
-		
+
 		$tbu_ids = array();
 		if ( !empty( $this_blog_users->results ) ) {
 			foreach( $this_blog_users->results as $this_blog_user ) {
 				$tbu_ids[] = $this_blog_user->ID;
 			}
 		}
-	
+
 		$users = new A2B_User_Query( array(
 			'blog_id' => false,
 			'search'  => '*' . $_REQUEST['query'] . '*',
 			'exclude' => $tbu_ids
 		) );
-		
+
 		if ( !empty( $users->results ) ) {
 			$suggestions = array();
 			$data 	     = array();
-	
+
 			foreach ( $users->results as $user ) {
 				$suggestions[] 	= $user->display_name . ' (' . $user->user_login . ')';
 				$data[] 	= $user->ID;
 			}
-	
+
 			$return['suggestions'] = $suggestions;
 			$return['data']	       = $data;
 		}
-	
+
 		echo json_encode( $return );
 		die();
 	}
-	
+
 	function catch_submit() {
 		if ( isset( $_POST['add_ids'] ) ) {
 			$redirect    = 'user-new.php';
@@ -92,20 +95,20 @@ class Add_User_Autocomplete {
 					$users_invited[] = (int)$user_id;
 				}
 			}
-			
+
 			if ( !empty( $users_added ) ) {
 				$redirect = add_query_arg( 'users_added', implode( ',', $users_added ), $redirect );
 			}
-			
+
 			if ( !empty( $users_invited ) ) {
 				$redirect = add_query_arg( 'users_invited', implode( ',', $users_invited ), $redirect );
 			}
-			
+
 			unset( $_POST );
 			wp_redirect( $redirect );
 		}
 	}
-	
+
 	function admin_notices() {
 		$type = '';
 		if ( isset( $_GET['users_added'] ) ) {
@@ -115,7 +118,7 @@ class Add_User_Autocomplete {
 			$user_ids = explode( ',', $_GET['users_invited'] );
 			$type = 'invited';
 		}
-		
+
 		if ( $type ) {
 			$ustring = '<ul style="list-style:disc; padding-left: 20px;">';
 			foreach( $user_ids as $user_id ) {
@@ -123,17 +126,17 @@ class Add_User_Autocomplete {
 				$ustring .= '<li>' . sprintf( __( '%1$s (%2$s)', 'a2b' ), $userdata->display_name, $userdata->user_login ) . '</li>';
 			}
 			$ustring .= '</ul>';
-			
+
 			switch ( $type ) {
 				case 'added' :
-					$message = sprintf( __( 'The following users were successfully added to your site: %s', 'a2b' ), $ustring ); 
+					$message = sprintf( __( 'The following users were successfully added to your site: %s', 'a2b' ), $ustring );
 					break;
-				
+
 				case 'invited' :
 					$message = sprintf( __( 'Invitation emails sent to the following users: %s A confirmation link must be clicked for them to be added to your site.', 'a2b' ), $ustring );
 					break;
 			}
-			
+
 			echo '<div id="message" class="updated"><p>' . $message . '</p></div>';
 		}
 	}

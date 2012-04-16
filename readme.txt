@@ -21,5 +21,8 @@ WordPress Multisite's Add Existing User field requires you to type the username 
 
 == Changelog ==
 
+= 1.1 =
+* Compatibility with WP 3.4 (disables WP's built-in autocomplete)
+
 = 1.0 =
 * Initial release
