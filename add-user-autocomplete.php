@@ -16,8 +16,8 @@ class Add_User_Autocomplete {
 	var $base_url;
 
 	function __construct() {
-		add_action( 'admin_print_styles', array( $this, 'add_admin_styles' ) );
-		add_action( 'admin_print_scripts', array( $this, 'add_admin_scripts' ) );
+		add_action( 'admin_print_styles-user-new.php', array( $this, 'add_admin_styles' ) );
+		add_action( 'admin_print_scripts-user-new.php', array( $this, 'add_admin_scripts' ) );
 		add_action( 'wp_ajax_add_to_blog_find_user', array( &$this, 'autocomplete_results' ) );
 		add_action( 'admin_init', array( &$this, 'catch_submit' ) );
 		add_action( 'admin_notices', array( &$this, 'admin_notices' ) );

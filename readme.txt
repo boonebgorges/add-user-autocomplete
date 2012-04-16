@@ -25,6 +25,7 @@ NOTE: Based in part on this plugin, WordPress 3.4+ has built-in autocomplete thr
 
 = 1.1 =
 * Compatibility with WP 3.4 (disables WP's built-in autocomplete)
+* Only load styles/scripts on user-new.php
 
 = 1.0 =
 * Initial release
