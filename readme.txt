@@ -12,6 +12,8 @@ Enables autocomplete for the Add Existing User field at Dashboard > Users > Add 
 
 WordPress Multisite's Add Existing User field requires you to type the username or email address of an existing user. This plugin makes this job a bit easier, by adding autocomplete functionality to the Add Existing User box. It also allows you to add multiple users at a time.
 
+NOTE: Based in part on this plugin, WordPress 3.4+ has built-in autocomplete throughout much of the Network Admin. If you wish to use WP's native autocomplete, do not use this plugin. However, Add User Autocomplete has some features that WP's version does not (the ability to add multiple users, search by display name); activating AUA will disactivate WP's autocomplete.
+
 == Installation ==
 
 * Install
