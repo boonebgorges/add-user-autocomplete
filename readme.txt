@@ -4,7 +4,7 @@ Donate link: http://teleogistic.net/donate
 Tags: add, add user, autocomplete, autosuggest
 Requires at least: 3.1
 Tested up to: 3.2.1
-Stable tag: 1.0
+Stable tag: 1.1
 
 Enables autocomplete for the Add Existing User field at Dashboard > Users > Add New. Requires Multisite.
 

@@ -4,7 +4,7 @@ Plugin Name: Add User Autocomplete
 Plugin URI: http://github.com/boonebgorges/add-user-autocomplete
 Description: Enables autocomplete for the Add Existing User field at Dashboard > Users > Add New
 Author: Boone Gorges
-Version: 1.0
+Version: 1.1
 Author URI: http://boonebgorges.com
 */
 
