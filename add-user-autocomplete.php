@@ -18,6 +18,8 @@ class Add_User_Autocomplete {
 	function __construct() {
 		add_action( 'admin_print_styles-user-new.php', array( $this, 'add_admin_styles' ) );
 		add_action( 'admin_print_scripts-user-new.php', array( $this, 'add_admin_scripts' ) );
+		add_action( 'admin_print_scripts-user-new.php', array( $this, 'load_string_filter' ) );
+		add_action( 'user_new_form_tag', array( $this, 'unload_string_filter' ) );
 		add_action( 'wp_ajax_add_to_blog_find_user', array( &$this, 'autocomplete_results' ) );
 		add_action( 'admin_init', array( &$this, 'catch_submit' ) );
 		add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
@@ -34,6 +36,55 @@ class Add_User_Autocomplete {
 		wp_enqueue_script( 'jquery.autocomplete', plugins_url() . '/add-user-autocomplete/js/jquery.autocomplete/jquery.autocomplete.js', array( 'jquery' ) );
 		wp_enqueue_script( 'add-user-autocomplete-js', plugins_url() . '/add-user-autocomplete/js/add-user-autocomplete.js', array( 'jquery', 'jquery.autocomplete' ) );
 
+	}
+
+	/**
+	 * Load our custom textdomain filter.
+	 *
+	 * @since 1.2.0
+	 */
+	function load_string_filter() {
+		// No need to do this for super admins.
+		if ( current_user_can( 'manage_network_users' ) ) {
+			return;
+		}
+
+		add_filter( 'gettext', array( $this, 'modify_strings' ), 10, 2 );
+	}
+
+	/**
+	 * Unload our custom textdomain filter.
+	 *
+	 * @since 1.2.0
+	 */
+	function unload_string_filter() {
+		remove_filter( 'gettext', array( $this, 'modify_strings' ), 10 );
+	}
+
+	/**
+	 * String changer method.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param  string $translation Translated text.
+	 * @param  string $text        Untranslated text.
+	 * @return string
+	 */
+	function modify_strings( $translation, $text ) {
+		switch ( $text ) {
+			case 'Email' :
+				// Use built-in WordPress string.
+				return __( 'Username' );
+				break;
+
+			case 'Enter the email address of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite.' :
+				return __( 'Enter the username of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite.', 'add-user-autocomplete' );
+				break;
+
+			default :
+				return $translation;
+				break;
+		}
 	}
 
 	function autocomplete_results() {
