@@ -74,11 +74,12 @@ class Add_User_Autocomplete {
 		switch ( $text ) {
 			case 'Email' :
 				// Use built-in WordPress string.
-				return __( 'Username' );
+				return __( 'Email or Username' );
 				break;
 
 			case 'Enter the email address of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite.' :
-				return __( 'Enter the username of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite.', 'add-user-autocomplete' );
+				// Use built-in WordPress string.
+				return __( 'Enter the email address or username of an existing user on this network to invite them to this site. That person will be sent an email asking them to confirm the invite.' );
 				break;
 
 			default :
