@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
 	$(ainput).after('<ul id="add-to-blog-users"></ul>');
 	
 	/* Spinner */
-	$(ainput).bind('keyup',function(event){
+	$(ainput).on('keyup',function(event){
 		// Delete, backspace, 0-9, a-z
 		if( ( 45 < event.keyCode && event.keyCode < 91 ) || event.keyCode == 8 ) {
 			$(ainput).addClass('loading');
