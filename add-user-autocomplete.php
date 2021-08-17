@@ -30,8 +30,8 @@ class Add_User_Autocomplete {
 	}
 
 	function add_admin_scripts() {
-		// Dequeue WP 3.4's autocomplete
-		wp_dequeue_script( 'user-search' );
+		// Dequeue WP's autocomplete
+		wp_dequeue_script( 'user-suggest' );
 
 		wp_enqueue_script( 'jquery.autocomplete', plugins_url() . '/add-user-autocomplete/js/jquery.autocomplete/jquery.autocomplete.js', array( 'jquery' ) );
 		wp_enqueue_script( 'add-user-autocomplete-js', plugins_url() . '/add-user-autocomplete/js/add-user-autocomplete.js', array( 'jquery', 'jquery.autocomplete' ) );
