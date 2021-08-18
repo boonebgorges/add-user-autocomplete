@@ -23,6 +23,29 @@ class Add_User_Autocomplete {
 		add_action( 'wp_ajax_add_to_blog_find_user', array( &$this, 'autocomplete_results' ) );
 		add_action( 'admin_init', array( &$this, 'catch_submit' ) );
 		add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
+
+		if ( $this->allow_subsite_admin_to_noconfirm() ) {
+			add_action( 'user_new_form', array( $this, 'subsite_noconfirm' ) );
+		}
+	}
+
+	/**
+	 * Helper method to determine if sub-site admins can skip confirmation emails.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return bool
+	 */
+	protected function allow_subsite_admin_to_noconfirm() {
+		/**
+		 * Filter to determine if sub-site admins can skip confirmation emails?
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param bool $retval Defaults to false.
+		 */
+		$retval = apply_filters( 'aua_allow_subsite_admin_to_noconfirm', false );
+		return $retval;
 	}
 
 	function add_admin_styles() {
@@ -135,7 +158,7 @@ class Add_User_Autocomplete {
 		if ( isset( $_POST['add_ids'] ) ) {
 			$redirect    = 'user-new.php';
 			foreach( (array)$_POST['add_ids'] as $user_id ) {
-				if ( isset( $_POST[ 'noconfirmation' ] ) && is_super_admin() ) {
+				if ( isset( $_POST[ 'noconfirmation' ] ) && ( ( ! current_user_can( 'manage_network_users' ) && $this->allow_subsite_admin_to_noconfirm() ) || is_super_admin() ) ) {
 					add_existing_user_to_blog( array( 'user_id' => $user_id, 'role' => $_REQUEST[ 'role' ] ) );
 					$users_added[] = (int)$user_id;
 				} else {
@@ -191,6 +214,36 @@ class Add_User_Autocomplete {
 
 			echo '<div id="message" class="updated"><p>' . $message . '</p></div>';
 		}
+	}
+
+	/**
+	 * Add back the 'Skip Confirmation Email' option for sub-site admins.
+	 *
+	 * @since 1.2.0
+	 */
+	public function subsite_noconfirm( $context ) {
+		// No need to do this for super admins!
+		if ( current_user_can( 'manage_network_users' ) ) {
+			return;
+		}
+
+		// Use built-in WordPress strings.
+		$heading = __( 'Skip Confirmation Email' );
+		$desc    = __( 'Add the user without sending an email that requires their confirmation.' );
+
+		echo '
+
+<table class="form-table">
+	<tr>
+		<th scope="row">' . $heading . '</th>
+		<td>
+			<input type="checkbox" name="noconfirmation" id="adduser-noconfirmation" value="1" />
+			<label for="adduser-noconfirmation">' . $desc . '</label>
+		</td>
+	</tr>
+</table>
+
+		';
 	}
 }
 
